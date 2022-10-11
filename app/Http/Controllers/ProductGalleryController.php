@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
-use Illuminate\Support\Str;
-use App\Models\Product;
+use App\Models\ProductGallery;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class ProductController extends Controller
+class ProductGalleryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,14 +17,11 @@ class ProductController extends Controller
     {
         if(request()->ajax())
         {
-            $query = Product::query();
+            $query = ProductGalleru::query();
 
             return DataTables::of($query)
                 ->addColumn('action', function($item){
                     return '
-                        <a href="'. route('dashboard.product.edit', $item->id) .'" class= "bg-gray-500 text-white rounded-md px-2 py-1 m-2">
-                            Edit
-                        </a>
                         <form class="inline-block" action="'. route('dashboard.product.destroy', $item->id) .'" method="POST">
                             <button class= "bg-green-500 text-white rounded-md px-2 py-1 m-2">
                                 Hapus
@@ -35,14 +30,17 @@ class ProductController extends Controller
                         </form>
                     ';
                 })
-                ->editColumn('price', function($item){
-                    return number_format($item->price);
+                ->editColumn('url', function($item){
+                    return '<img style="max-width: 150pxW" src="'. Storage::url($item->url) .'"/>';
+                }) 
+                ->editColumn('is_featured', function($item){
+                    return $image->is_featured ? 'yes' :'no';
                 }) 
                 ->rawColumns(['action'])
                 ->make();
         }
 
-        return view('pages.dashboard.product.index');
+        return view('pages.dashboard.gallery.index');
     }
 
     /**
@@ -52,7 +50,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.product.create');
+        //
     }
 
     /**
@@ -61,14 +59,9 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(Request $request)
     {
-        $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
-
-        Product::create($data);
-
-        return redirect()->route('dashboard.product.index');
+        //
     }
 
     /**
@@ -88,11 +81,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit($id)
     {
-        return view('pages.dashboard.product.edit', [
-            'item' => $product
-        ]);
+        //
     }
 
     /**
@@ -102,15 +93,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, Product $product)
+    public function update(Request $request, $id)
     {
-        $data = $request->all();
-        
-        $data['slug'] = Str::slug($request->name);
-
-        $product->update($data);
-
-        return redirect()->route('dashboard.product.index');
+        //
     }
 
     /**
@@ -119,10 +104,8 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy( Product $product)
+    public function destroy($id)
     {
-        $product->delete();
-
-        return redirect()->route('dashboard.product.index');
+        //
     }
 }
