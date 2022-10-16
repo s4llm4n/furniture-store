@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Product &raquo;  {{ $product->name }} &raquo; Gallery &raquo; Upload Photos
+            Transaction &raquo;  {{ $item->name }} &raquo; Edit
         </h2>
     </x-slot>
 
@@ -24,18 +24,29 @@
                         </div>
                     </div>
                 @endif
-                <form action="{{ route('dashboard.product.gallery.store', $product->id) }}" class="w-full" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('dashboard.transaction.update', $item->id) }}" class="w-full" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <div class="flex flex-wrap -mx-3 mb-6">
                     <div class="w-full px-3 mb-6">
                         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Name</label>
-                        <input type="file" multiple name="files[]" accept="images/*" placeholder="photos" class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                        <select name="status" class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option value="{{ $item->status }}">{{ $item->status }}></option>
+                            <option disabled---------------</option>
+                                <option value="PENDING">PENDING</option>
+                                <option value="SUCCESS">SUCCESS</option>
+                                <option value="CHALLENGE">CHALLENGE</option>
+                                <option value="FAILED">FAILED</option>
+                                <option value="SHIPPING">SHIPPING</option>
+                                <option value="SHIPPED">SHIPPED</option>
+                        </select>
                     </div>
                 </div>
+
                 <div class="flex flex-wrap -mx-3 mb-6">
                     <div class="w-full px-3">
                         <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded shadow-lg">
-                            Save Gallery
+                            Update Transaction
                         </button>
                     </div>
                 </div>
